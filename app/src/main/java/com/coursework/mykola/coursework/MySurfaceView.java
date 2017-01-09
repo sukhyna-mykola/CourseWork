@@ -76,7 +76,7 @@ public class MySurfaceView extends SurfaceView implements
         Paint p = new Paint();
         p.setColor(Color.RED);
         p.setTextAlign(Paint.Align.CENTER);
-        p.setTextSize(18);
+        p.setTextSize(15);
         p.setColor(Color.WHITE);
 
 
@@ -94,57 +94,54 @@ public class MySurfaceView extends SurfaceView implements
 
 
             p.setColor(Color.BLACK);
-            c.drawText(String.valueOf(node.getWeight()), node.getCenter_x(), node.getCenter_y(), p);
+            p.setTextSize(15);
             c.drawText(String.valueOf(node.getId()), node.getCenter_x(), node.getCenter_y() - NodeGraph.RADIUS_NODE / 2, p);
-
-
+            p.setTextSize(25);
+            c.drawText("—", node.getCenter_x(), node.getCenter_y(), p);
+            p.setColor(Color.RED);
+            c.drawText(String.valueOf(node.getWeight()), node.getCenter_x(), node.getCenter_y() + NodeGraph.RADIUS_NODE / 2, p);
         }
+        p.setColor(Color.WHITE);
 
+        for (int i = 0; i < model.getMatrixS().length; i++) {
+            for (int j = 0; j < model.getMatrixS()[i].length; j++) {
+                if (!model.getMatrixS()[i][j].equals(Model.NULL)) {
 
-        //  Toast.makeText(getContext(), "indexV="+indexV+"indexh="+indexH, Toast.LENGTH_SHORT).show();
-/*
-        for (int i = 0; i < graphObjs.length; i++) {
-            for (int j = 0; j < graphObjs.length; j++) {
-                if (!modernMatr[i][j].equals(Model.NULL)) {
-                    Point p1 = new Point(graphObjs[i].center_x, graphObjs[i].center_y);
-                    Point p2 = new Point(graphObjs[j].center_x, graphObjs[j].center_y);
-                    Point p_from = getCircleLineIntersectionPoint(p1, p2, p1, Model.h / 2).get(1);
-                    Point p_to = getCircleLineIntersectionPoint(p1, p2, p2, Model.h / 2).get(0);
+                    if (model.getCurrEdge() != null) {
+                        if (model.getNodes().get(i).getId() == model.getCurrEdge().getIdFrom() &&
+                                model.getNodes().get(j).getId() == model.getCurrEdge().getIdTo())
 
-                    if (!modernMatr[i][j].equals(Model.NULL) && !modernMatr[j][i].equals(Model.NULL)) {
-                        p_from = getCollCircleWithAngle(p1, p_from, (float) (Math.PI / 6));
-                        p_to = getCollCircleWithAngle(p2, p_to, (float) (-Math.PI / 6));
-                    }
-
-
-                    if (i == j && !modernMatr[i][j].equals(Model.NULL)) {
-                        float center_x = (float) (p1.x + graphObjs[i].getRadius() * Math.cos(graphObjs[i].getAngle()));
-                        float center_y = (float) (p1.y + graphObjs[i].getRadius() * Math.sin(graphObjs[i].getAngle()));
-                        c.drawCircle(center_x, center_y, Model.h / 2, p);
-                        p_to = getCollCircleWithAngle(p2, new Point(center_x, center_y), (float) (-Math.PI / 3));
-                        p_from = getCollCircleWithAngle(p1, new Point(center_x, center_y), (float) (-Math.PI / 3));
-                        c.rotate((float) (150 + Math.toDegrees(graphObjs[i].angle)), p_to.x, p_to.y);
-                        fillArrow(p, c, p_from.x, p_from.y, p_to.x, p_to.y);
-                        c.rotate((float) -(150 + Math.toDegrees(graphObjs[i].angle)), p_to.x, p_to.y);
-                        p.setColor(Color.RED);
-                        c.drawText(modernMatr[i][j], center_x, center_y, p);
+                            p.setColor(Color.GREEN);
+                        else
+                            p.setColor(Color.WHITE);
+                    } else
                         p.setColor(Color.WHITE);
 
-                    } else {
-                        c.drawLine(p_from.x, p_from.y, p_to.x, p_to.y, p);
-                        float center_x = ceneter(p_from.x, p_to.x);
-                        float center_y = ceneter(p_from.y, p_to.y);
-                        p.setColor(Color.RED);
-                        c.drawText(modernMatr[i][j], center_x, center_y, p);
-                        p.setColor(Color.WHITE);
-                        fillArrow(p, c, p_from.x, p_from.y, p_to.x, p_to.y);
-                    }
+
+                    float x1 = model.getNodes().get(i).getCenter_x();
+                    float y1 = model.getNodes().get(i).getCenter_y();
+                    float x2 = model.getNodes().get(j).getCenter_x();
+                    float y2 = model.getNodes().get(j).getCenter_y();
+
+                    c.drawText(model.getMatrixS()[i][j], (x1 + x2) / 2, (y1 + y2) / 2, p);
+
+
+                    Point p1 = new Point(model.getNodes().get(i).getCenter_x(), model.getNodes().get(i).getCenter_y());
+                    Point p2 = new Point(model.getNodes().get(j).getCenter_x(), model.getNodes().get(j).getCenter_y());
+                    Point p_from = getCircleLineIntersectionPoint(p1, p2, p1, NodeGraph.RADIUS_NODE).get(1);
+                    Point p_to = getCircleLineIntersectionPoint(p1, p2, p2, NodeGraph.RADIUS_NODE).get(0);
+
+
+                    c.drawLine(p_from.x, p_from.y, p_to.x, p_to.y, p);
+                    float center_x = ceneter(p_from.x, p_to.x);
+                    float center_y = ceneter(p_from.y, p_to.y);
+                    p.setColor(Color.RED);
+                    c.drawText(model.getMatrixS()[i][j], center_x, center_y, p);
+                    p.setColor(Color.WHITE);
+                    fillArrow(p, c, p_from.x, p_from.y, p_to.x, p_to.y);
                 }
-
             }
-
-        }*/
-
+        }
     }
 
     Point getCollCircleWithAngle(Point center, Point point, float alpha) {

@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Coursework</string>
     <string name="ok">OK</string>
+    <string name="node_mode_title">CourseWork (Режим Вузла)</string>
+    <string name="edge_mode_title">CourseWork (Режим Зв\'язку)</string>
+    <string name="choose_weight_text">Виберіть вагу елемента</string>
+    <string name="choose_to_node">Виберіть дочірній вузол</string>
+    <string name="choose_from_node">Виберіть батьківський вузол</string>
 </resources>

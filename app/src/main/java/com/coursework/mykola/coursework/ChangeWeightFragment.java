@@ -46,6 +46,7 @@ public class ChangeWeightFragment extends DialogFragment {
         numberPicker.setValue(weight);
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
+                .setTitle(R.string.choose_weight_text)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

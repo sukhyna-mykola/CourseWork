@@ -14,11 +14,14 @@ public class NodeGraph {
     private int id;
 
 
-    public static final int RADIUS_NODE = 50;
+    public static final int RADIUS_NODE = 45;
     public static int NUMBER_NODE;
 
     public NodeGraph() {
         this.id = ++NUMBER_NODE;
+
+        center_x = RADIUS_NODE ;
+        center_y = RADIUS_NODE ;
 
     }
 
