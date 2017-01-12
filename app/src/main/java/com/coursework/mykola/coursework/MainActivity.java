@@ -2,11 +2,15 @@ package com.coursework.mykola.coursework;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private boolean arrowMode;
 
     public static final String DIALOG_WEIGHT = "DIALOG_WEIGHT";
+    public static final String DIALOG_PROC = "DIALOG_PROC";
 
     public static final String TAG = "TAG";
 
@@ -48,6 +53,21 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         mySurfaceView.setOnTouchListener(this);
         mySurfaceView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         frame.addView(mySurfaceView);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentManager manager = getSupportFragmentManager();
+        NumberOfProcFragment dialog = new NumberOfProcFragment();
+        dialog.show(manager, DIALOG_PROC);
+        return true;
     }
 
     private void setNodeMode() {
@@ -82,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         model.setCurrNode(null);
 
 
-
     }
 
     @Override
@@ -95,15 +114,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (model.checkCollisionNode(x, y)) {
                     if (model.getCurrEdge() == null) {
                         model.setFromNode();
-                        Snackbar.make(v, R.string.choose_to_node,Snackbar.LENGTH_LONG).show();
-                    } else
-
-                    if (model.getCurrEdge().getIdFrom() != -1) {
+                        Snackbar.make(v, R.string.choose_to_node, Snackbar.LENGTH_LONG).show();
+                    } else if (model.getCurrEdge().getIdFrom() != -1) {
                         model.setToNode();
-                        if(model.getCurrEdge().getIdTo() != -1) {
+                        if (model.getCurrEdge().getIdTo() != -1) {
                             FragmentManager manager = getSupportFragmentManager();
-                            ChangeWeightFragment dialog = ChangeWeightFragment.newInstance(model.getCurrEdge().getWeight());
-                            dialog.show(manager, DIALOG_WEIGHT);
+                            if (manager.findFragmentByTag(DIALOG_WEIGHT) == null) {
+                                ChangeWeightFragment dialog = ChangeWeightFragment.newInstance(model.getCurrEdge().getWeight());
+                                dialog.show(manager, DIALOG_WEIGHT);
+                            }
                         }
                     }
 
@@ -130,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             case R.id.add_new: {
                 if (arrowMode) {
                     model.addingNewEdge();
-                    Snackbar.make(v, R.string.choose_from_node,Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(v, R.string.choose_from_node, Snackbar.LENGTH_LONG).show();
                 } else {
                     model.addNewNode();
                     FragmentManager manager = getSupportFragmentManager();
@@ -191,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if (arrowMode) {
             model.addNewEdge(newWeight);
             model.getCurrEdge().setWeight(newWeight);
+            model.setSubModeAddNewEdge(false);
         } else {
             model.getCurrNode().setWeight(newWeight);
         }

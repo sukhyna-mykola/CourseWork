@@ -27,6 +27,8 @@ public class MySurfaceView extends SurfaceView implements
         super(context);
         // TODO Auto-generated constructor stub
         getHolder().addCallback(this);
+      //  setZOrderOnTop(true);
+      //  this.setBackgroundColor(0Xffffffff);
         this.model = model;
 
     }
@@ -57,6 +59,7 @@ public class MySurfaceView extends SurfaceView implements
             c = getHolder().lockCanvas(null);
             synchronized (getHolder()) {
                 c.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                c.drawColor(Color.WHITE);
 
                 drawGraph(c);
             }
@@ -72,17 +75,16 @@ public class MySurfaceView extends SurfaceView implements
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void drawGraph(Canvas c) {
+    synchronized private void drawGraph(Canvas c) {
         Paint p = new Paint();
-        p.setColor(Color.RED);
         p.setTextAlign(Paint.Align.CENTER);
-        p.setTextSize(15);
-        p.setColor(Color.WHITE);
 
 
         // String[][] modernMatr = model.matrixLGraph.clone();
 
         for (NodeGraph node : model.getNodes()) {
+            p.setColor(Color.BLACK);
+            c.drawCircle(node.getCenter_x(), node.getCenter_y(), NodeGraph.RADIUS_NODE+2, p);
             if (model.getCurrNode() != null)
                 if (node.getId() == (model.getCurrNode().getId()))
                     p.setColor(Color.GREEN);
@@ -93,6 +95,7 @@ public class MySurfaceView extends SurfaceView implements
             c.drawCircle(node.getCenter_x(), node.getCenter_y(), NodeGraph.RADIUS_NODE, p);
 
 
+
             p.setColor(Color.BLACK);
             p.setTextSize(15);
             c.drawText(String.valueOf(node.getId()), node.getCenter_x(), node.getCenter_y() - NodeGraph.RADIUS_NODE / 2, p);
@@ -101,29 +104,19 @@ public class MySurfaceView extends SurfaceView implements
             p.setColor(Color.RED);
             c.drawText(String.valueOf(node.getWeight()), node.getCenter_x(), node.getCenter_y() + NodeGraph.RADIUS_NODE / 2, p);
         }
-        p.setColor(Color.WHITE);
 
         for (int i = 0; i < model.getMatrixS().length; i++) {
-            for (int j = 0; j < model.getMatrixS()[i].length; j++) {
+            for (int j = 0; j < model.getMatrixS().length; j++) {
                 if (!model.getMatrixS()[i][j].equals(Model.NULL)) {
 
                     if (model.getCurrEdge() != null) {
                         if (model.getNodes().get(i).getId() == model.getCurrEdge().getIdFrom() &&
                                 model.getNodes().get(j).getId() == model.getCurrEdge().getIdTo())
-
                             p.setColor(Color.GREEN);
                         else
-                            p.setColor(Color.WHITE);
+                            p.setColor(Color.BLACK);
                     } else
-                        p.setColor(Color.WHITE);
-
-
-                    float x1 = model.getNodes().get(i).getCenter_x();
-                    float y1 = model.getNodes().get(i).getCenter_y();
-                    float x2 = model.getNodes().get(j).getCenter_x();
-                    float y2 = model.getNodes().get(j).getCenter_y();
-
-                    c.drawText(model.getMatrixS()[i][j], (x1 + x2) / 2, (y1 + y2) / 2, p);
+                        p.setColor(Color.BLACK);
 
 
                     Point p1 = new Point(model.getNodes().get(i).getCenter_x(), model.getNodes().get(i).getCenter_y());
@@ -133,12 +126,20 @@ public class MySurfaceView extends SurfaceView implements
 
 
                     c.drawLine(p_from.x, p_from.y, p_to.x, p_to.y, p);
+                    fillArrow(p, c, p_from.x, p_from.y, p_to.x, p_to.y);
+
                     float center_x = ceneter(p_from.x, p_to.x);
                     float center_y = ceneter(p_from.y, p_to.y);
-                    p.setColor(Color.RED);
-                    c.drawText(model.getMatrixS()[i][j], center_x, center_y, p);
+
                     p.setColor(Color.WHITE);
-                    fillArrow(p, c, p_from.x, p_from.y, p_to.x, p_to.y);
+                    p.setStyle(Paint.Style.FILL);
+                    c.drawCircle(center_x, center_y, 20, p);
+
+
+                    p.setColor(Color.RED);
+                    c.drawText(model.getMatrixS()[i][j], center_x, center_y+10, p);
+
+
                 }
             }
         }
@@ -155,9 +156,7 @@ public class MySurfaceView extends SurfaceView implements
     }
 
     float ceneter(float arg1, float arg2) {
-        if (arg1 > arg2) {
-            return arg2 + (arg1 - arg2) / 2;
-        } else return arg1 + (arg2 - arg1) / 2;
+        return (arg1 + arg2) / 2;
     }
 
     private void fillArrow(Paint paint, Canvas canvas, float x0, float y0, float x1, float y1) {

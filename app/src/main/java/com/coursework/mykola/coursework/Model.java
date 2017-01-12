@@ -297,7 +297,6 @@ public class Model {
         if (currNode.getId() != currEdge.getIdFrom()) {
             currEdge.setIdTo(currNode.getId());
             edges.add(currEdge);
-            setSubModeAddNewEdge(false);
         }
     }
 

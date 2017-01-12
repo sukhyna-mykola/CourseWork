@@ -6,4 +6,6 @@
     <string name="choose_weight_text">Виберіть вагу елемента</string>
     <string name="choose_to_node">Виберіть дочірній вузол</string>
     <string name="choose_from_node">Виберіть батьківський вузол</string>
+    <string name="number_of_proc_title">Виберіть кількість процесорів</string>
+    <string name="planer_title">CourseWork (Планування на процесори)</string>
 </resources>
