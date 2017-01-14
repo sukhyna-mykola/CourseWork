@@ -37,7 +37,11 @@ public class NumberOfProcFragment extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(getContext(), GraphGantaActivity.class));
+
+                        Intent intent = new Intent(getContext(),GraphGantaActivity.class);
+                        intent.putExtra(GraphGantaActivity.NUMBER_OF_PROCESSORS,numberPicker.getValue());
+                        startActivity(intent);
+
                         dismiss();
                     }
                 })

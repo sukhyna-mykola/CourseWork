@@ -12,8 +12,8 @@ import java.util.Arrays;
 public class Model {
 
 
-    private String[][] matrixS;
-    private ArrayList<NodeGraph> nodes;
+    public static String[][] matrixS;
+    public  static  ArrayList<NodeGraph> nodes;
     private ArrayList<EdgeGraph> edges;
 
     private NodeGraph currNode;

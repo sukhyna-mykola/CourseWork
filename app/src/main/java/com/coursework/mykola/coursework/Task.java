@@ -2,38 +2,30 @@ package com.coursework.mykola.coursework;
 
 import java.util.ArrayList;
 
+
 /**
- * Created with IntelliJ IDEA.
- * User: hadgehog
- * Date: 03.01.13
- * Time: 12:20
- * To change this template use File | Settings | File Templates.
+ * Created by kolas on 11.09.16.
  */
 public class Task {
-    private int id; //ідентифікатор задачі
-    private int duration;//тривалість (тактів)
-    private int remainder;//залишок виконання(тактів)
-    private ArrayList<Task> dependentTasks;//залежні задачі(дочірні)
-    private ArrayList<Task> fatherTasks;  // задачі, від яких залежить дана задача
-    private ArrayList<Task> fatherTasksToDo;  // задачі, які треба виконати для початку виконання цієї задачі
-    private boolean isPretended = false; // для задачі є ресурс для виконання (перетендує забрати дан задачу)
 
-    public Task(int id, int duration) {
-        this.id = id;
-        this.duration = duration;
-        this.remainder = duration;
-    }
+     int timeExecut;
+     int timeToExecuted;
+     ArrayList<Task> dependentTasks;
+     ArrayList<Task> fatherTasks;  
+     ArrayList<Task> fatherTasksBefore;
+     int id;
+
 
     public int getId() {
         return id;
     }
 
-    public int getDuration() {
-        return duration;
+    public int gettimeExecut() {
+        return timeExecut;
     }
 
-    public int getRemainder() {
-        return remainder;
+    public int gettimeToExecuted() {
+        return timeToExecuted;
     }
 
     public void setDependentTasks(ArrayList<Task> dependentTasks) {
@@ -44,24 +36,35 @@ public class Task {
         return dependentTasks;
     }
 
-    public ArrayList<Task> getFatherTasksToDo() {
-        return fatherTasksToDo;
+    public ArrayList<Task> getfatherTasksBefore() {
+        return fatherTasksBefore;
+    }
+    boolean hightPriority = false;
+
+    public Task(int id, int timeExecut) {
+        this.id = id;
+        this.timeExecut = timeExecut;
+        this.timeToExecuted = timeExecut;
     }
 
     public void setFatherTasks(ArrayList<Task> fatherTasks) {
         this.fatherTasks = fatherTasks;
-        this.fatherTasksToDo = (ArrayList<Task>) fatherTasks.clone();
+        this.fatherTasksBefore = (ArrayList<Task>) fatherTasks.clone();
     }
 
-    public boolean isPretended() {
-        return isPretended;
+    public boolean hightPriority() {
+        return hightPriority;
     }
-
-    public void setPretended(boolean pretended) {
-        isPretended = pretended;
-    }
-
     public void execute() {
-        remainder--;
+        timeToExecuted--;
     }
+    public void setPretended(boolean pretended) {
+        hightPriority = pretended;
+    }
+
+    public ArrayList<Task> getFatherTasks() {
+        return fatherTasks;
+    }
+
+
 }
